@@ -228,6 +228,7 @@ public class MineSweeper extends Application {
         found_landmines = 0;
         landmine_num = 0;
         game_started = false;
+        win = false;
         startGame();
     }
 

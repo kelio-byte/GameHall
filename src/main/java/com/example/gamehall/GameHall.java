@@ -62,15 +62,23 @@ public class GameHall extends Application {
         switch (gameName) {
             case "马冬梅扫雷" -> startMineSweeper();
             case "雷神五子棋" -> System.out.println("雷神五子棋游戏启动中...");
-            case "刺激的外场" -> System.out.println("刺激的外场游戏启动中...");
+            case "刺激的外场" -> startOtherGames();
         }
     }
 
     private void startMineSweeper() {
         // 创建新的Stage来显示MineSweeper游戏
         MineSweeper mineSweeperGame = new MineSweeper();
-        Stage newGameStage = new Stage();
-        mineSweeperGame.start(newGameStage); // 启动新游戏
+        mineSweeperGame.start(new Stage()); // 启动新游戏
+    }
+
+    private void startGokomu() {
+
+    }
+
+    private void startOtherGames() {
+        OtherGames otherGames = new OtherGames();
+        otherGames.start(new Stage());
     }
 
 

@@ -22,6 +22,7 @@ public class MineSweeper extends Application {
     private boolean game_over = false;
     private boolean game_started = false;
     private Stage primaryStage;
+    private boolean win = false;
 
     @Override
     public void start(Stage primaryStage){
@@ -83,6 +84,7 @@ public class MineSweeper extends Application {
             }
         }
 
+        System.out.println("landmine_num:" +  landmine_num);
         // 创建菜单
         MenuBar menuBar = createMenuBar();
 
@@ -127,7 +129,19 @@ public class MineSweeper extends Application {
         pauseButton.setOnAction(e -> pauseGame());
 
         MenuItem exitButton = new MenuItem("退出");
-        exitButton.setOnAction(e -> {primaryStage.close();});
+        exitButton.setOnAction(e -> {
+            Alert exitAlert = new Alert(AlertType.INFORMATION);
+            exitAlert.setTitle("是否退出游戏");
+            exitAlert.setHeaderText("游戏已暂停，请确定是否真的退出。");
+            ButtonType confirmButtonType = new ButtonType("确定退出");
+            ButtonType cancelButtonType = new ButtonType("取消");
+            exitAlert.getButtonTypes().setAll(confirmButtonType, cancelButtonType);
+            exitAlert.showAndWait().ifPresent(type -> {
+                if(type == confirmButtonType){
+                    primaryStage.close();
+                }
+            });
+        });
 
         MenuItem restartButton = new MenuItem("重新开始");
         restartButton.setOnAction(e -> resetGame());
@@ -172,12 +186,14 @@ public class MineSweeper extends Application {
             cellButton.setGraphic(getImageView("file:src/main/resources/icons/smile.png"));
             cellButton.setDisable(true);
             found_landmines++;
+            System.out.println("found_landmines:" + found_landmines);
             Check_win();
         }
     }
 
     public void Check_win(){
         if(found_landmines == height * width - landmine_num){
+            win = true;
             showGameOver("恭喜你！找到了所有无地雷的格子！");
         }
     }
@@ -188,14 +204,20 @@ public class MineSweeper extends Application {
         Alert gameOverAlert = new Alert(AlertType.INFORMATION);
         gameOverAlert.setTitle("游戏结束");
         gameOverAlert.setHeaderText(null);
-        gameOverAlert.setContentText(message);
-
+        gameOverAlert.setContentText(message + "\n\n请选择接下来的操作：");
+        gameOverAlert.setHeight(200);
+        if(win){
+            gameOverAlert.setGraphic(getImageView("file:src/main/resources/icons/cheer.png"));
+        }else{
+            gameOverAlert.setGraphic(getImageView("file:src/main/resources/icons/cry.png"));
+        }
+        ButtonType continueButton = new ButtonType("再来一轮");
+        ButtonType exitButton = new ButtonType("不想玩了");
+        gameOverAlert.getButtonTypes().setAll(continueButton, exitButton);
         gameOverAlert.showAndWait().ifPresent(response -> {
-            if (response.getText().equals("再来一轮！")) {
-                // 重新开始游戏
+            if (response == continueButton) {
                 resetGame();
-            } else {
-                // 退出游戏，返回游戏厅
+            } else if (response == exitButton) {
                 primaryStage.close();
             }
         });

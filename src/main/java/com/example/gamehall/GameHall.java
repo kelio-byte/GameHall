@@ -61,7 +61,7 @@ public class GameHall extends Application {
     private void launchGame(String gameName) {
         switch (gameName) {
             case "马冬梅扫雷" -> startMineSweeper();
-            case "雷神五子棋" -> System.out.println("雷神五子棋游戏启动中...");
+            case "雷神五子棋" -> startGokomu();
             case "刺激的外场" -> startOtherGames();
         }
     }
@@ -73,7 +73,8 @@ public class GameHall extends Application {
     }
 
     private void startGokomu() {
-
+        Gokomu gokomuGame = new Gokomu();
+        gokomuGame.start(new Stage());
     }
 
     private void startOtherGames() {
